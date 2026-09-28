@@ -1,0 +1,217 @@
+{
+  "theme": "system",
+  "title": "Полезные программы и сервисы",
+  "subtitle": "Ссылки на скачивание браузеров, утилит, архивов и сетевых инструментов",
+  "tags": [
+    { "id": "t-browser", "name": "Браузер",     "color": "#2563eb" },
+    { "id": "t-opensrc", "name": "Open Source", "color": "#059669" },
+    { "id": "t-network", "name": "Сеть",        "color": "#7c3aed" },
+    { "id": "t-media",   "name": "Медиа",       "color": "#db2777" },
+    { "id": "t-game",    "name": "Игры",        "color": "#4338ca" },
+    { "id": "t-archive", "name": "Архиватор",   "color": "#d97706" },
+    { "id": "t-linux",   "name": "Linux",       "color": "#f97316" },
+    { "id": "t-utility", "name": "Утилита",     "color": "#0ea5e9" }
+  ],
+  "links": [
+    {
+      "id": "l1",
+      "name": "Яндекс Браузер",
+      "description": "Быстрый и безопасный браузер с встроенными нейросетями, переводом видео, блокировкой рекламы и защитой от мошеннических сайтов.",
+      "tagIds": ["t-browser"],
+      "url": "https://browser.yandex.ru/download",
+      "button": "Скачать"
+    },
+    {
+      "id": "l2",
+      "name": "Google Chrome",
+      "description": "Один из самых популярных браузеров в мире с минималистичным интерфейсом, высокой скоростью работы и поддержкой современных веб-стандартов.",
+      "tagIds": ["t-browser"],
+      "url": "https://www.google.com/intl/ru/chrome/next-steps.html",
+      "button": "Перейти"
+    },
+    {
+      "id": "l3",
+      "name": "SophiApp",
+      "description": "Бесплатное приложение с открытым исходным кодом для тонкой настройки Windows 10 и 11. Более 130 твиков, современный интерфейс, портативная версия.",
+      "tagIds": ["t-opensrc"],
+      "url": "https://github.com/Sophia-Community/SophiApp",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l4",
+      "name": "K-Lite Codec Pack",
+      "description": "Универсальный набор кодеков и утилит для воспроизведения аудио и видеофайлов практически любых форматов. Доступен в нескольких редакциях.",
+      "tagIds": ["t-media"],
+      "url": "https://www.codecguide.com/download_kl.htm",
+      "button": "Скачать"
+    },
+    {
+      "id": "l5",
+      "name": "WinRAR",
+      "description": "Мощный архиватор с поддержкой форматов RAR, ZIP и многих других. Сжатие, шифрование, многотомные архивы и восстановление повреждённых данных.",
+      "tagIds": ["t-archive"],
+      "url": "https://www.rarlab.com/download.htm",
+      "button": "Скачать"
+    },
+    {
+      "id": "l6",
+      "name": "7-Zip",
+      "description": "Бесплатный архиватор с открытым кодом и высокой степенью сжатия. Поддерживает собственный формат 7z, а также ZIP, RAR, ISO и десятки других.",
+      "tagIds": ["t-opensrc", "t-archive"],
+      "url": "https://www.7-zip.org/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l7",
+      "name": "Amnezia VPN",
+      "description": "Бесплатный VPN-клиент с открытым кодом для создания собственного сервера. Поддерживает протоколы с защитой от DPI-детектирования.",
+      "tagIds": ["t-network", "t-opensrc"],
+      "url": "https://github.com/amnezia-vpn/amnezia-client",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l8",
+      "name": "Steam",
+      "description": "Крупнейшая платформа цифровой дистрибуции игр: около 30 000 игр, автоматические обновления, сообщество, достижения и облачные сохранения.",
+      "tagIds": ["t-game"],
+      "url": "https://store.steampowered.com/about/",
+      "button": "Установить"
+    },
+    {
+      "id": "l9",
+      "name": "Notepad++",
+      "description": "Бесплатный текстовый редактор с открытым кодом для программистов. Подсветка синтаксиса для 80+ языков, сворачивание кода, поддержка плагинов.",
+      "tagIds": ["t-opensrc"],
+      "url": "https://github.com/notepad-plus-plus/notepad-plus-plus",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l10",
+      "name": "DPI Detector",
+      "description": "Инструмент для анализа цензуры трафика: обнаруживает блокировки сайтов, CDN, подмену DNS и обрывы соединений по TCP 16–20 КБ.",
+      "tagIds": ["t-network"],
+      "url": "https://github.com/Runnin4ik/dpi-detector",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l11",
+      "name": "Netwatch",
+      "description": "Сетевой монитор для терминала: живой захват трафика, определение процессов за соединениями, диагностика проблем с TLS и подсказки по исправлению.",
+      "tagIds": ["t-network"],
+      "url": "https://github.com/matthart1983/netwatch",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l12",
+      "name": "AdGuard VPN",
+      "description": "Быстрый и приватный VPN-сервис с открытым исходным кодом. Собственный протокол, шифрование трафика, блокировка рекламы и трекеров.",
+      "tagIds": ["t-network"],
+      "url": "https://s3.eu-north-1.amazonaws.com/adguard-vpn.com/index.html",
+      "button": "Скачать"
+    },
+    {
+      "id": "l13",
+      "name": "Rufus",
+      "description": "Утилита для создания загрузочных USB-накопителей. Поддерживает Windows, Linux, UEFI и MBR/GPT. Работает без установки.",
+      "tagIds": ["t-utility", "t-opensrc"],
+      "url": "https://rufus.ie/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l14",
+      "name": "VirusTotal",
+      "description": "Онлайн-сервис для проверки файлов и ссылок на вирусы. Анализирует более 70 антивирусными движками, показывает репутацию и поведение.",
+      "tagIds": ["t-network"],
+      "url": "https://www.virustotal.com/",
+      "button": "Перейти"
+    },
+    {
+      "id": "l15",
+      "name": "Ubuntu",
+      "description": "Самый популярный дистрибутив Linux. Стабильная LTS-версия каждые 2 года, огромное сообщество, корпоративная поддержка Canonical.",
+      "tagIds": ["t-linux", "t-opensrc"],
+      "url": "https://ubuntu.com/download",
+      "button": "Скачать"
+    },
+    {
+      "id": "l16",
+      "name": "Kubuntu",
+      "description": "Ubuntu с рабочим столом KDE Plasma. Привычный интерфейс Windows-подобного типа, гибкая настройка и лёгкость.",
+      "tagIds": ["t-linux", "t-opensrc"],
+      "url": "https://kubuntu.org/download/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l17",
+      "name": "Arch Linux",
+      "description": "Минималистичный дистрибутив Linux с философией «сделай сам». Постоянное обновление, AUR, полный контроль над системой.",
+      "tagIds": ["t-linux", "t-opensrc"],
+      "url": "https://archlinux.org/download/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l18",
+      "name": "Zapret Discord YouTube",
+      "description": "Бесплатный инструмент с открытым кодом для обхода блокировок и замедления Discord и YouTube. Работает как локальный прокси, не требует установки драйверов, поддерживает Windows и Linux.",
+      "tagIds": ["t-network", "t-opensrc"],
+      "url": "https://github.com/flowseal/zapret-discord-youtube",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l19",
+      "name": "TeamSpeak",
+      "description": "Проприетарное приложение для голосовой связи через интернет. Низкая задержка, высокое качество звука, шумоподавление, поддержка собственных серверов и клиентов для Windows, macOS, Linux, Android и iOS.",
+      "tagIds": ["t-network", "t-utility"],
+      "url": "https://www.teamspeak.com/en/downloads",
+      "button": "Скачать"
+    },
+    {
+      "id": "l20",
+      "name": "Discord",
+      "description": "Бесплатная платформа для голосового, видео- и текстового общения. Популярна среди геймеров и сообществ: серверы, каналы, демонстрация экрана, боты и интеграции с играми.",
+      "tagIds": ["t-network", "t-utility"],
+      "url": "https://discord.com/download",
+      "button": "Скачать"
+    },
+    {
+      "id": "l21",
+      "name": "Kaspersky Virus Removal Tool",
+      "description": "Бесплатная утилита для лечения заражённых компьютеров. Сканирует систему и удаляет вирусы, трояны, рекламное ПО и руткиты, которые пропустил основной антивирус.",
+      "tagIds": ["t-utility"],
+      "url": "https://www.kaspersky.ru/downloads/free-virus-removal-tool",
+      "button": "Скачать"
+    },
+    {
+      "id": "l22",
+      "name": "Figma",
+      "description": "Облачный сервис для дизайна интерфейсов и прототипирования с настольными приложениями для Windows и macOS. Совместная работа в реальном времени, плагины, автолейауты и экспорт в код.",
+      "tagIds": ["t-media", "t-utility"],
+      "url": "https://www.figma.com/downloads/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l23",
+      "name": "Telegram Desktop",
+      "description": "Официальный десктопный клиент мессенджера Telegram для Windows, macOS и Linux. Быстрый, безопасный, синхронизируется с мобильным приложением, поддерживает секретные чаты и обмен файлами до 2 ГБ.",
+      "tagIds": ["t-network", "t-utility"],
+      "url": "https://desktop.telegram.org/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l24",
+      "name": "Tabby",
+      "description": "Современный эмулятор терминала с открытым кодом, SSH- и последовательный клиент для Windows, macOS и Linux. Настраиваемый интерфейс, вкладки, разделение экрана, плагины и портативная версия.",
+      "tagIds": ["t-utility", "t-opensrc"],
+      "url": "https://github.com/Eugeny/tabby",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l25",
+      "name": "TLauncher",
+      "description": "Популярный лаунчер Minecraft для Windows, macOS и Linux. Позволяет играть в разные версии игры, устанавливать моды, скины и плащи, а также запускать несколько аккаунтов одновременно.",
+      "tagIds": ["t-game", "t-utility"],
+      "url": "https://tlauncher.ru/",
+      "button": "Скачать"
+    }
+  ]
+}

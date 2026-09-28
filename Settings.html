@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Редактор настроек — Links</title>
+<style>
+    :root, [data-theme="light"] {
+        --bg: #f4f6f8; --card-bg: #ffffff; --elevated: #ffffff;
+        --text: #1c1e21; --text-muted: #5f6368;
+        --border: #e4e6eb; --border-strong: #cbd5e1;
+        --accent: #2563eb; --accent-hover: #1d4ed8; --accent-soft: rgba(37,99,235,0.1);
+        --danger: #dc2626; --danger-soft: #fef2f2;
+        --warn: #d97706; --warn-soft: #fef3c7;
+        --success: #059669; --success-soft: #ecfdf5;
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+        --input-bg: #ffffff; --hover-bg: #f8fafc;
+    }
+    [data-theme="dark"] {
+        --bg: #0b1220; --card-bg: #131c2e; --elevated: #1a2438;
+        --text: #e6edf7; --text-muted: #94a3b8;
+        --border: #26324a; --border-strong: #3b4a68;
+        --accent: #3b82f6; --accent-hover: #60a5fa; --accent-soft: rgba(59,130,246,0.15);
+        --danger: #f87171; --danger-soft: rgba(248,113,113,0.12);
+        --warn: #fbbf24; --warn-soft: rgba(251,191,36,0.12);
+        --success: #34d399; --success-soft: rgba(52,211,153,0.12);
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25);
+        --input-bg: #0f1728; --hover-bg: #1a2438;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: var(--bg); color: var(--text); line-height: 1.6;
+        padding: 30px 20px 100px;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--text-muted); margin-bottom: 24px; font-size: 0.95rem; }
+    .subtitle code { background: var(--card-bg); padding: 1px 6px; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 0.9em; }
+
+    .file-bar {
+        background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+        padding: 16px 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm);
+        display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .file-bar-info { flex: 1; min-width: 200px; }
+    .file-bar-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .file-bar-status { font-size: 0.85rem; color: var(--text-muted); }
+    .file-bar-status.ok { color: var(--success); }
+    .file-bar-status.warn { color: var(--warn); }
+    .file-bar-status.err { color: var(--danger); }
+    .file-bar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .dirty-badge {
+        display: inline-flex; align-items: center; gap: 4px;
+        font-size: 0.72rem; font-weight: 700;
+        color: var(--warn);
+        padding: 3px 9px;
+        background: var(--warn-soft);
+        border-radius: 20px;
+        white-space: nowrap;
+    }
+
+    .btn {
+        display: inline-block; text-align: center; padding: 10px 18px;
+        background: var(--accent); color: #fff; text-decoration: none;
+        font-weight: 600; font-size: 0.9rem; border-radius: 8px;
+        transition: background-color 0.15s, transform 0.1s;
+        border: none; cursor: pointer; font-family: inherit;
+    }
+    .btn:hover { background: var(--accent-hover); }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-secondary { background: var(--elevated); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--hover-bg); border-color: var(--border-strong); }
+    .btn-danger-text { background: transparent; color: var(--danger); border: 1px dashed var(--danger); }
+    .btn-danger-text:hover { background: var(--danger-soft); }
+    .btn-sm { padding: 7px 13px; font-size: 0.82rem; }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-block { width: 100%; }
+
+    .main-card {
+        background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+        box-shadow: var(--shadow-sm); padding: 24px;
+        transition: opacity 0.2s;
+    }
+    .main-card.disabled { opacity: 0.5; pointer-events: none; }
+
+    .tabs {
+        display: flex; gap: 4px; border-bottom: 1px solid var(--border);
+        margin-bottom: 22px; overflow-x: auto; scrollbar-width: thin;
+    }
+    .tab {
+        background: none; border: none; cursor: pointer;
+        padding: 10px 16px 12px; font-size: 0.92rem; font-weight: 600;
+        color: var(--text-muted); border-bottom: 2px solid transparent;
+        transition: color 0.15s, border-color 0.15s; font-family: inherit; white-space: nowrap;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .section-title {
+        font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.6px;
+        font-weight: 700; color: var(--text-muted); margin-bottom: 10px;
+    }
+    .section-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+
+    .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .theme-option {
+        background: var(--elevated); border: 2px solid var(--border); border-radius: 12px;
+        padding: 14px 10px; cursor: pointer; text-align: center;
+        transition: border-color 0.15s, background-color 0.15s;
+        font-family: inherit; color: var(--text);
+    }
+    .theme-option:hover { border-color: var(--border-strong); }
+    .theme-option.selected { border-color: var(--accent); background: var(--accent-soft); }
+    .theme-preview {
+        width: 100%; height: 46px; border-radius: 8px; margin-bottom: 8px;
+        border: 1px solid var(--border); display: flex; overflow: hidden;
+    }
+    .theme-preview .pv-side { width: 30%; }
+    .theme-preview .pv-main { flex: 1; padding: 5px; display: flex; flex-direction: column; gap: 3px; }
+    .theme-preview .pv-line { height: 4px; border-radius: 3px; }
+    .theme-preview-light { background: #f4f6f8; }
+    .theme-preview-light .pv-side { background: #dbe1e9; }
+    .theme-preview-light .pv-line { background: #b0bccb; }
+    .theme-preview-dark { background: #0b1220; }
+    .theme-preview-dark .pv-side { background: #1a2438; }
+    .theme-preview-dark .pv-line { background: #3b4a68; }
+    .theme-preview-auto { background: linear-gradient(90deg, #f4f6f8 50%, #0b1220 50%); }
+    .theme-preview-auto .pv-side { background: linear-gradient(90deg, #dbe1e9 50%, #1a2438 50%); }
+    .theme-preview-auto .pv-line { background: linear-gradient(90deg, #b0bccb 50%, #3b4a68 50%); }
+    .theme-option-label { font-size: 0.85rem; font-weight: 600; }
+
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+    .field input[type="text"], .field input[type="url"], .field textarea {
+        width: 100%; padding: 10px 12px;
+        border: 1px solid var(--border); border-radius: 8px;
+        font-size: 0.92rem; font-family: inherit;
+        color: var(--text); background: var(--input-bg);
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field input:focus, .field textarea:focus {
+        outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .field textarea { resize: vertical; min-height: 70px; }
+    .field .hint { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+
+    .tag-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .tag-row {
+        display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+        background: var(--elevated); border: 1px solid var(--border); border-radius: 10px;
+    }
+    .tag-color-input {
+        width: 34px; height: 34px; border: 1px solid var(--border);
+        border-radius: 8px; cursor: pointer; padding: 2px;
+        background: var(--input-bg); flex-shrink: 0;
+    }
+    .tag-name-input {
+        flex-grow: 1; min-width: 0; padding: 8px 10px;
+        border: 1px solid var(--border); border-radius: 8px;
+        background: var(--input-bg); color: var(--text);
+        font-size: 0.92rem; font-family: inherit;
+    }
+    .tag-name-input:focus { outline: none; border-color: var(--accent); }
+    .tag-preview {
+        display: inline-block; font-size: 0.7rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.5px;
+        padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+        max-width: 120px; overflow: hidden; text-overflow: ellipsis;
+    }
+    .icon-btn {
+        width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+        background: var(--elevated); cursor: pointer; font-size: 0.9rem; line-height: 1;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--text-muted); flex-shrink: 0; padding: 0;
+        font-family: inherit;
+    }
+    .icon-btn:hover { background: var(--hover-bg); color: var(--text); }
+    .icon-btn.danger:hover { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
+    .tag-add-row {
+        display: flex; align-items: center; gap: 10px; padding: 12px;
+        border: 1px dashed var(--border-strong); border-radius: 10px; flex-wrap: wrap;
+    }
+
+    /* ============ Ссылки: список ============ */
+    .link-list-toolbar {
+        display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+        padding: 10px 14px; margin-bottom: 10px;
+        background: var(--elevated); border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 0.85rem;
+    }
+    .select-all-label {
+        display: flex; align-items: center; gap: 8px;
+        cursor: pointer; font-weight: 600; user-select: none;
+    }
+    .select-all-label input[type="checkbox"] {
+        width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent);
+    }
+    .link-list-info {
+        color: var(--text-muted);
+        flex-grow: 1;
+        font-size: 0.82rem;
+    }
+    .link-list-actions {
+        display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .bulk-select {
+        padding: 7px 12px;
+        border: 1px solid var(--border); border-radius: 8px;
+        background: var(--card-bg); color: var(--text);
+        font-size: 0.82rem; font-family: inherit; cursor: pointer;
+        max-width: 180px;
+    }
+    .bulk-select:focus { outline: none; border-color: var(--accent); }
+
+    .link-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .link-row {
+        display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+        background: var(--elevated); border: 1px solid var(--border); border-radius: 10px;
+        transition: border-color 0.15s, background-color 0.15s, opacity 0.15s;
+        position: relative;
+    }
+    .link-row:hover { border-color: var(--border-strong); }
+    .link-row.selected {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+    }
+    .link-row.dragging { opacity: 0.35; }
+    .link-row.drag-over-top::before,
+    .link-row.drag-over-bottom::after {
+        content: "";
+        position: absolute; left: 8px; right: 8px;
+        height: 2px; background: var(--accent); border-radius: 2px;
+    }
+    .link-row.drag-over-top::before { top: -6px; }
+    .link-row.drag-over-bottom::after { bottom: -6px; }
+
+    .row-checkbox {
+        width: 16px; height: 16px; cursor: pointer;
+        accent-color: var(--accent); flex-shrink: 0;
+    }
+    .drag-handle {
+        cursor: grab;
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1;
+        padding: 4px 2px;
+        user-select: none;
+        letter-spacing: -2px;
+        flex-shrink: 0;
+    }
+    .drag-handle:active { cursor: grabbing; }
+
+    .link-row-info { flex-grow: 1; min-width: 0; }
+    .link-row-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .link-row-url { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .link-row-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .reorder-btn {
+        width: 26px; height: 26px; border-radius: 6px;
+        border: 1px solid var(--border); background: var(--card-bg);
+        color: var(--text-muted); cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.75rem; line-height: 1; padding: 0;
+        font-family: inherit;
+    }
+    .reorder-btn:hover:not(:disabled) { background: var(--hover-bg); color: var(--text); border-color: var(--border-strong); }
+    .reorder-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .tag-select {
+        display: flex; flex-wrap: wrap; gap: 8px; padding: 12px;
+        background: var(--input-bg); border: 1px solid var(--border);
+        border-radius: 10px; min-height: 54px; align-items: center;
+    }
+    .tag-chip {
+        padding: 6px 14px; border: 1.5px solid var(--border); border-radius: 20px;
+        background: transparent; color: var(--text-muted);
+        font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit;
+        display: inline-flex; align-items: center; gap: 6px;
+    }
+    .tag-chip::before {
+        content: ""; width: 8px; height: 8px; border-radius: 50%;
+        background: currentColor; opacity: 0.6;
+    }
+    .tag-chip.selected::before { opacity: 1; }
+
+    .form-actions {
+        display: flex; gap: 12px; margin-top: 22px;
+        position: sticky; bottom: -22px;
+        background: var(--card-bg);
+        padding-top: 16px; padding-bottom: 4px;
+        border-top: 1px solid var(--border);
+    }
+    .form-actions .btn { flex: 1; }
+
+    .empty-state { text-align: center; color: var(--text-muted); padding: 30px 10px; font-size: 0.92rem; }
+    .divider { height: 1px; background: var(--border); margin: 22px 0; }
+
+    .help {
+        font-size: 0.82rem; color: var(--text-muted);
+        background: var(--elevated); border: 1px solid var(--border);
+        border-radius: 8px; padding: 10px 14px; margin-top: 12px;
+    }
+    .help code {
+        background: var(--hover-bg); padding: 1px 5px; border-radius: 4px;
+        font-family: ui-monospace, monospace; font-size: 0.85em;
+    }
+
+    @media (max-width: 640px) {
+        h1 { font-size: 1.3rem; }
+        body { padding: 20px 12px 80px; }
+        .main-card { padding: 18px; }
+        .theme-grid { grid-template-columns: 1fr; }
+        .file-bar { padding: 14px 16px; }
+        .link-row-actions .reorder-btn { display: flex; }
+        .drag-handle { display: none; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Редактор настроек</h1>
+    <p class="subtitle">Настройте тему, заголовок, теги и ссылки. Всё сохранится в <code>App.html</code> — его и отправляйте другим.</p>
+
+    <div class="file-bar">
+        <div class="file-bar-info">
+            <div class="file-bar-title">
+                <span id="fileBarTitle">Файл App.html не выбран</span>
+                <span class="dirty-badge" id="dirtyBadge" hidden>● несохранённые изменения</span>
+            </div>
+            <div class="file-bar-status" id="fileBarStatus">Нажмите «Открыть App.html» и выберите файл из этой же папки.</div>
+        </div>
+        <div class="file-bar-actions">
+            <button class="btn btn-secondary" id="openAppFileBtn">📂 Открыть App.html</button>
+            <button class="btn" id="saveToAppFileBtn" disabled>💾 Сохранить в App.html</button>
+        </div>
+    </div>
+
+    <div class="main-card disabled" id="mainCard">
+        <div class="tabs">
+            <button class="tab active" data-tab="general">Общее</button>
+            <button class="tab" data-tab="tags">Теги</button>
+            <button class="tab" data-tab="links">Ссылки</button>
+            <button class="tab" data-tab="data">Бэкап</button>
+        </div>
+
+        <!-- Общее -->
+        <div class="tab-panel active" data-panel="general">
+            <div class="section-title">Тема оформления</div>
+            <p class="section-subtitle">Будет применена в App.html.</p>
+            <div class="theme-grid" id="themeGrid">
+                <button class="theme-option" data-theme-value="light">
+                    <div class="theme-preview theme-preview-light"><div class="pv-side"></div><div class="pv-main"><div class="pv-line" style="width:70%"></div><div class="pv-line" style="width:45%"></div><div class="pv-line" style="width:85%"></div></div></div>
+                    <div class="theme-option-label">Светлая</div>
+                </button>
+                <button class="theme-option" data-theme-value="dark">
+                    <div class="theme-preview theme-preview-dark"><div class="pv-side"></div><div class="pv-main"><div class="pv-line" style="width:70%"></div><div class="pv-line" style="width:45%"></div><div class="pv-line" style="width:85%"></div></div></div>
+                    <div class="theme-option-label">Тёмная</div>
+                </button>
+                <button class="theme-option" data-theme-value="system">
+                    <div class="theme-preview theme-preview-auto"><div class="pv-side"></div><div class="pv-main"><div class="pv-line" style="width:70%"></div><div class="pv-line" style="width:45%"></div><div class="pv-line" style="width:85%"></div></div></div>
+                    <div class="theme-option-label">Системная</div>
+                </button>
+            </div>
+            <div class="divider"></div>
+            <div class="section-title">Заголовки страницы</div>
+            <div class="field">
+                <label for="pageTitleInput">Заголовок (H1)</label>
+                <input type="text" id="pageTitleInput" placeholder="Полезные программы и сервисы" maxlength="120">
+            </div>
+            <div class="field">
+                <label for="pageSubtitleInput">Подзаголовок</label>
+                <input type="text" id="pageSubtitleInput" placeholder="Краткое описание" maxlength="200">
+            </div>
+        </div>
+
+        <!-- Теги -->
+        <div class="tab-panel" data-panel="tags">
+            <div class="section-title">Список тегов</div>
+            <p class="section-subtitle">Изменяйте названия и цвета.</p>
+            <div class="tag-list" id="tagList"></div>
+            <div class="section-title" style="margin-top:22px;">Добавить тег</div>
+            <div class="tag-add-row">
+                <input type="color" class="tag-color-input" id="newTagColor" value="#2563eb">
+                <input type="text" class="tag-name-input" id="newTagName" placeholder="Название тега" maxlength="40" style="flex:1;min-width:160px;">
+                <button class="btn btn-sm" id="addTagBtn">Добавить</button>
+            </div>
+        </div>
+
+        <!-- Ссылки -->
+        <div class="tab-panel" data-panel="links">
+            <div id="linksListView">
+                <div class="section-title">Все ссылки</div>
+                <p class="section-subtitle">Перетаскивайте строки за ⋮⋮ или используйте стрелки ↑ ↓ для смены порядка.</p>
+
+                <div class="link-list-toolbar" id="linkListToolbar" hidden>
+                    <label class="select-all-label">
+                        <input type="checkbox" id="selectAllCheckbox">
+                        <span>Выбрать все</span>
+                    </label>
+                    <div class="link-list-info" id="linkListInfo">0 выбрано</div>
+                    <div class="link-list-actions" id="linkListActions" hidden>
+                        <select class="bulk-select" id="bulkTagSelect">
+                            <option value="">🏷 Добавить тег…</option>
+                        </select>
+                        <button class="btn btn-sm btn-danger-text" id="bulkDeleteBtn">🗑 Удалить выбранные</button>
+                    </div>
+                </div>
+
+                <div class="link-list" id="linkList"></div>
+                <button class="btn btn-block" id="addLinkBtn" style="margin-bottom:12px;">+ Добавить ссылку</button>
+                <div class="divider"></div>
+                <button class="btn btn-danger-text btn-block" id="resetBtn">Очистить список ссылок</button>
+            </div>
+
+            <div id="linkFormView" hidden>
+                <form id="linkForm" novalidate>
+                    <div class="field">
+                        <label for="f-name">Название</label>
+                        <input type="text" id="f-name" placeholder="Например: Яндекс Браузер" required maxlength="80">
+                    </div>
+                    <div class="field">
+                        <label for="f-desc">Описание</label>
+                        <textarea id="f-desc" placeholder="Краткое описание" maxlength="400"></textarea>
+                    </div>
+                    <div class="field">
+                        <label>Теги</label>
+                        <div class="tag-select" id="linkTags"></div>
+                        <div class="hint">Нажмите на тег, чтобы включить или отключить его.</div>
+                    </div>
+                    <div class="field">
+                        <label for="f-url">Ссылка</label>
+                        <input type="url" id="f-url" placeholder="https://example.com" required>
+                    </div>
+                    <div class="field">
+                        <label for="f-button">Текст кнопки</label>
+                        <input type="text" id="f-button" placeholder="Перейти" maxlength="30">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelLinkForm">Отмена</button>
+                        <button type="submit" class="btn">Готово</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Бэкап -->
+        <div class="tab-panel" data-panel="data">
+            <div class="section-title">Экспорт / импорт JSON</div>
+            <p class="section-subtitle">Резервный способ. Позволяет сделать бэкап настроек.</p>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="exportJsonBtn">📥 Экспорт .json</button>
+                <button class="btn btn-secondary" id="importJsonBtn">📤 Импорт .json</button>
+                <input type="file" id="importJsonInput" accept="application/json,.json" hidden>
+            </div>
+            <div class="help">
+                Настройки хранятся внутри <code>App.html</code>. Кнопка «Сохранить в App.html» перезаписывает их в выбранном файле.
+                При переключении вкладки браузера изменения сохраняются автоматически, а при попытке закрыть с несохранёнными правками появится предупреждение.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    "use strict";
+
+    var TAG_OPEN = "<" + "script";
+    var TAG_CLOSE = "<" + "/script" + ">";
+
+    var supportsFileSystem =
+        typeof window.showOpenFilePicker === "function" &&
+        typeof window.showSaveFilePicker === "function";
+
+    var state = {
+        theme: "system",
+        title: "Полезные программы и сервисы",
+        subtitle: "",
+        tags: [],
+        links: []
+    };
+
+    var appFileHandle = null;
+    var appFileBefore = null;
+    var appFileAfter = null;
+    var editingLinkId = null;
+    var selectedTagIds = [];
+    var selectedLinkIds = {};   // id -> true
+    var dragSourceId = null;
+    var dirty = false;
+
+    function $(s, r) { return (r || document).querySelector(s); }
+    function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+    function uid(p) { return (p || "id") + "-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+    function esc(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+    }
+    function isValidHex(c) { return typeof c === "string" && /^#[0-9a-fA-F]{6}$/.test(c); }
+    function hexToRgba(hex, a) {
+        if (!isValidHex(hex)) hex = "#64748b";
+        var h = hex.slice(1);
+        return "rgba(" + parseInt(h.slice(0, 2), 16) + "," + parseInt(h.slice(2, 4), 16) + "," + parseInt(h.slice(4, 6), 16) + "," + a + ")";
+    }
+    function getTag(id) {
+        for (var i = 0; i < state.tags.length; i++) if (state.tags[i].id === id) return state.tags[i];
+        return null;
+    }
+    function findLink(id) {
+        for (var i = 0; i < state.links.length; i++) if (state.links[i].id === id) return state.links[i];
+        return null;
+    }
+
+    /* ============ Dirty tracking ============ */
+    function markDirty() {
+        if (dirty) return;
+        dirty = true;
+        var badge = $("#dirtyBadge");
+        if (badge) badge.hidden = false;
+    }
+    function markClean() {
+        dirty = false;
+        var badge = $("#dirtyBadge");
+        if (badge) badge.hidden = true;
+    }
+
+    window.addEventListener("beforeunload", function (e) {
+        if (!dirty) return;
+        e.preventDefault();
+        e.returnValue = "";
+        return "";
+    });
+
+    // Автосохранение при уходе со страницы (переключение вкладки/сворачивание)
+    document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "hidden" && dirty && appFileHandle) {
+            tryAutoSave();
+        }
+    });
+
+    async function tryAutoSave() {
+        if (!appFileHandle || appFileBefore === null || appFileAfter === null) return;
+        try {
+            var perm = await appFileHandle.queryPermission({ mode: "readwrite" });
+            if (perm !== "granted") return; // без разрешения не трогаем файл
+            var payload = getCurrentData();
+            var newHtml = buildAppHtml(appFileBefore, appFileAfter, payload);
+            var writable = await appFileHandle.createWritable();
+            await writable.write(newHtml);
+            await writable.close();
+            markClean();
+            setFileBar("ok", "Файл: " + appFileHandle.name, "Автосохранено в App.html");
+        } catch (e) {
+            console.warn("Автосохранение не удалось:", e);
+        }
+    }
+
+    /* ============ Тема редактора ============ */
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    function effectiveTheme(pref) { return pref === "system" ? (mq.matches ? "dark" : "light") : pref; }
+    function applyEditorTheme() {
+        document.documentElement.setAttribute("data-theme", effectiveTheme(state.theme));
+        $$(".theme-option").forEach(function (el) {
+            el.classList.toggle("selected", el.dataset.themeValue === state.theme);
+        });
+    }
+    try { mq.addEventListener("change", applyEditorTheme); }
+    catch (e) { try { mq.addListener(applyEditorTheme); } catch (e2) {} }
+
+    /* ============ Статус файла ============ */
+    function setFileBar(kind, title, status) {
+        $("#fileBarTitle").innerHTML = esc(title) + ' <span class="dirty-badge" id="dirtyBadge"' + (dirty ? "" : " hidden") + '>● несохранённые изменения</span>';
+        var st = $("#fileBarStatus");
+        st.textContent = status;
+        st.className = "file-bar-status" + (kind ? " " + kind : "");
+        $("#saveToAppFileBtn").disabled = !appFileHandle;
+        $("#mainCard").classList.toggle("disabled", !appFileHandle);
+    }
+
+    /* ============ Разбор App.html ============ */
+    function extractAppData(html) {
+        var keyIdx = html.indexOf('id="app-data"');
+        if (keyIdx < 0) keyIdx = html.indexOf("id='app-data'");
+        if (keyIdx < 0) return null;
+        var openStart = html.lastIndexOf(TAG_OPEN, keyIdx);
+        if (openStart < 0) return null;
+        var openEnd = html.indexOf(">", keyIdx);
+        if (openEnd < 0) return null;
+        openEnd += 1;
+        var closeIdx = html.indexOf(TAG_CLOSE, openEnd);
+        if (closeIdx < 0) return null;
+        var jsonText = html.slice(openEnd, closeIdx);
+        var data;
+        try { data = JSON.parse(jsonText); }
+        catch (e) { return null; }
+        return {
+            data: data,
+            before: html.slice(0, openEnd),
+            after: html.slice(closeIdx)
+        };
+    }
+
+    function buildAppHtml(before, after, data) {
+        var json = JSON.stringify(data, null, 2);
+        json = json.split(TAG_CLOSE).join("<\\" + "/script" + ">");
+        return before + json + after;
+    }
+
+    /* ============ Данные ============ */
+    function applyData(data) {
+        if (!data || typeof data !== "object") return;
+        state.theme = ["light", "dark", "system"].indexOf(data.theme) >= 0 ? data.theme : "system";
+        state.title = typeof data.title === "string" ? data.title : "Полезные программы и сервисы";
+        state.subtitle = typeof data.subtitle === "string" ? data.subtitle : "";
+        state.tags = Array.isArray(data.tags) ? data.tags.map(function (t) {
+            return {
+                id: t.id || uid("t"),
+                name: String(t.name || "Тег").slice(0, 40),
+                color: isValidHex(t.color) ? t.color : "#64748b"
+            };
+        }) : [];
+        state.links = Array.isArray(data.links) ? data.links.map(function (l) {
+            return {
+                id: l.id || uid("l"),
+                name: String(l.name || "Без названия"),
+                description: String(l.description || ""),
+                tagIds: Array.isArray(l.tagIds) ? l.tagIds.filter(function (x) { return typeof x === "string"; }) : [],
+                url: String(l.url || ""),
+                button: String(l.button || "Перейти")
+            };
+        }) : [];
+        selectedLinkIds = {};
+    }
+
+    function getCurrentData() {
+        return {
+            theme: state.theme,
+            title: state.title,
+            subtitle: state.subtitle,
+            tags: state.tags,
+            links: state.links
+        };
+    }
+
+    function renderAll() {
+        applyEditorTheme();
+        $("#pageTitleInput").value = state.title;
+        $("#pageSubtitleInput").value = state.subtitle;
+        renderTagList();
+        renderLinkList();
+        renderBulkTagOptions();
+    }
+
+    /* ============ Табы ============ */
+    $$(".tab").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+            $$(".tab").forEach(function (t) { t.classList.toggle("active", t.dataset.tab === tab.dataset.tab); });
+            $$(".tab-panel").forEach(function (p) { p.classList.toggle("active", p.dataset.panel === tab.dataset.tab); });
+            if (tab.dataset.tab === "links") showLinksList();
+        });
+    });
+
+    /* ============ Тема ============ */
+    $("#themeGrid").addEventListener("click", function (e) {
+        var btn = e.target.closest(".theme-option");
+        if (!btn) return;
+        state.theme = btn.dataset.themeValue;
+        applyEditorTheme();
+        markDirty();
+    });
+
+    /* ============ Заголовки ============ */
+    $("#pageTitleInput").addEventListener("input", function (e) {
+        state.title = e.target.value.slice(0, 120);
+        markDirty();
+    });
+    $("#pageSubtitleInput").addEventListener("input", function (e) {
+        state.subtitle = e.target.value.slice(0, 200);
+        markDirty();
+    });
+
+    /* ============ Теги ============ */
+    function renderTagList() {
+        var box = $("#tagList");
+        box.innerHTML = "";
+        if (!state.tags.length) {
+            box.innerHTML = '<p class="empty-state">Тегов пока нет.</p>';
+            return;
+        }
+        state.tags.forEach(function (tag) {
+            var row = document.createElement("div");
+            row.className = "tag-row";
+            row.dataset.tagId = tag.id;
+            row.innerHTML =
+                '<input type="color" class="tag-color-input" value="' + esc(tag.color) + '" data-role="color">' +
+                '<input type="text" class="tag-name-input" value="' + esc(tag.name) + '" maxlength="40" data-role="name">' +
+                '<span class="tag-preview" data-role="preview" style="background:' + hexToRgba(tag.color, 0.16) +
+                    ';color:' + esc(tag.color) + ';">' + esc(tag.name) + '</span>' +
+                '<button class="icon-btn danger" data-role="delete" title="Удалить">🗑</button>';
+            box.appendChild(row);
+        });
+    }
+
+    $("#tagList").addEventListener("input", function (e) {
+        var row = e.target.closest(".tag-row");
+        if (!row) return;
+        var tag = getTag(row.dataset.tagId);
+        if (!tag) return;
+        if (e.target.dataset.role === "name") tag.name = e.target.value.slice(0, 40);
+        else if (e.target.dataset.role === "color") {
+            tag.color = isValidHex(e.target.value) ? e.target.value : tag.color;
+        }
+        var p = row.querySelector('[data-role="preview"]');
+        p.textContent = tag.name || "Тег";
+        p.style.background = hexToRgba(tag.color, 0.16);
+        p.style.color = tag.color;
+        refreshLinkTagSelector();
+        renderBulkTagOptions();
+        markDirty();
+    });
+
+    $("#tagList").addEventListener("click", function (e) {
+        var del = e.target.closest('button[data-role="delete"]');
+        if (!del) return;
+        var row = del.closest(".tag-row");
+        var id = row.dataset.tagId;
+        var tag = getTag(id);
+        if (!tag) return;
+        if (!confirm('Удалить тег «' + tag.name + '»?')) return;
+        state.tags = state.tags.filter(function (t) { return t.id !== id; });
+        state.links.forEach(function (l) {
+            l.tagIds = l.tagIds.filter(function (tid) { return tid !== id; });
+        });
+        renderTagList();
+        renderLinkList();
+        refreshLinkTagSelector();
+        renderBulkTagOptions();
+        markDirty();
+    });
+
+    $("#addTagBtn").addEventListener("click", function () {
+        var name = $("#newTagName").value.trim();
+        var color = $("#newTagColor").value;
+        if (!name) { $("#newTagName").focus(); return; }
+        var exists = state.tags.some(function (t) {
+            return t.name.toLowerCase() === name.toLowerCase();
+        });
+        if (exists) { alert("Такой тег уже есть."); return; }
+        state.tags.push({ id: uid("t"), name: name.slice(0, 40), color: isValidHex(color) ? color : "#2563eb" });
+        $("#newTagName").value = "";
+        renderTagList();
+        refreshLinkTagSelector();
+        renderBulkTagOptions();
+        markDirty();
+    });
+
+    $("#newTagName").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); $("#addTagBtn").click(); }
+    });
+
+    /* ============ Ссылки: список ============ */
+    function renderLinkList() {
+        var box = $("#linkList");
+        var toolbar = $("#linkListToolbar");
+        box.innerHTML = "";
+
+        if (!state.links.length) {
+            toolbar.hidden = true;
+            box.innerHTML = '<p class="empty-state">Ссылок нет.</p>';
+            updateBulkUI();
+            return;
+        }
+        toolbar.hidden = false;
+
+        state.links.forEach(function (link, idx) {
+            var row = document.createElement("div");
+            row.className = "link-row";
+            row.dataset.linkId = link.id;
+            row.draggable = true;
+            if (selectedLinkIds[link.id]) row.classList.add("selected");
+
+            var checked = selectedLinkIds[link.id] ? "checked" : "";
+            var isFirst = idx === 0;
+            var isLast = idx === state.links.length - 1;
+
+            row.innerHTML =
+                '<input type="checkbox" class="row-checkbox" data-role="select" ' + checked + ' title="Выбрать">' +
+                '<span class="drag-handle" title="Перетащить для смены порядка">⋮⋮</span>' +
+                '<div class="link-row-info">' +
+                    '<div class="link-row-name">' + esc(link.name) + '</div>' +
+                    '<div class="link-row-url">' + esc(link.url) + '</div>' +
+                '</div>' +
+                '<div class="link-row-actions">' +
+                    '<button class="reorder-btn" data-action="up" data-id="' + esc(link.id) + '" title="Вверх"' + (isFirst ? " disabled" : "") + '>▲</button>' +
+                    '<button class="reorder-btn" data-action="down" data-id="' + esc(link.id) + '" title="Вниз"' + (isLast ? " disabled" : "") + '>▼</button>' +
+                    '<button class="icon-btn" data-action="edit" data-id="' + esc(link.id) + '" title="Редактировать">✎</button>' +
+                    '<button class="icon-btn danger" data-action="delete" data-id="' + esc(link.id) + '" title="Удалить">🗑</button>' +
+                '</div>';
+            box.appendChild(row);
+        });
+
+        updateBulkUI();
+        attachDragHandlers();
+    }
+
+    // Drag & drop
+    function attachDragHandlers() {
+        var rows = $$("#linkList .link-row");
+        rows.forEach(function (row) {
+            row.addEventListener("dragstart", function (e) {
+                dragSourceId = row.dataset.linkId;
+                row.classList.add("dragging");
+                try { e.dataTransfer.effectAllowed = "move"; } catch (err) {}
+                try { e.dataTransfer.setData("text/plain", row.dataset.linkId); } catch (err) {}
+            });
+            row.addEventListener("dragend", function () {
+                row.classList.remove("dragging");
+                dragSourceId = null;
+                clearDragOverClasses();
+            });
+            row.addEventListener("dragover", function (e) {
+                e.preventDefault();
+                try { e.dataTransfer.dropEffect = "move"; } catch (err) {}
+                var rect = row.getBoundingClientRect();
+                var midY = rect.top + rect.height / 2;
+                clearDragOverClasses();
+                row.classList.add(e.clientY < midY ? "drag-over-top" : "drag-over-bottom");
+            });
+            row.addEventListener("dragleave", function () {
+                row.classList.remove("drag-over-top", "drag-over-bottom");
+            });
+            row.addEventListener("drop", function (e) {
+                e.preventDefault();
+                var src = dragSourceId || (e.dataTransfer && e.dataTransfer.getData("text/plain"));
+                var target = row.dataset.linkId;
+                if (!src || !target || src === target) {
+                    clearDragOverClasses();
+                    return;
+                }
+                var rect = row.getBoundingClientRect();
+                var midY = rect.top + rect.height / 2;
+                var before = e.clientY < midY;
+                moveLinkRelative(src, target, before);
+                clearDragOverClasses();
+            });
+        });
+    }
+
+    function clearDragOverClasses() {
+        $$("#linkList .link-row").forEach(function (r) {
+            r.classList.remove("drag-over-top", "drag-over-bottom");
+        });
+    }
+
+    function moveLinkRelative(sourceId, targetId, before) {
+        var fromIdx = -1;
+        for (var i = 0; i < state.links.length; i++) if (state.links[i].id === sourceId) { fromIdx = i; break; }
+        if (fromIdx < 0) return;
+        var item = state.links.splice(fromIdx, 1)[0];
+        var toIdx = -1;
+        for (var j = 0; j < state.links.length; j++) if (state.links[j].id === targetId) { toIdx = j; break; }
+        if (toIdx < 0) { state.links.splice(fromIdx, 0, item); return; }
+        var insertAt = before ? toIdx : toIdx + 1;
+        state.links.splice(insertAt, 0, item);
+        markDirty();
+        renderLinkList();
+    }
+
+    function moveLinkBy(id, delta) {
+        var idx = -1;
+        for (var i = 0; i < state.links.length; i++) if (state.links[i].id === id) { idx = i; break; }
+        if (idx < 0) return;
+        var newIdx = idx + delta;
+        if (newIdx < 0 || newIdx >= state.links.length) return;
+        var item = state.links.splice(idx, 1)[0];
+        state.links.splice(newIdx, 0, item);
+        markDirty();
+        renderLinkList();
+    }
+
+    // Обработчики строк
+    $("#linkList").addEventListener("click", function (e) {
+        // Чекбокс
+        if (e.target.classList.contains("row-checkbox")) {
+            var row = e.target.closest(".link-row");
+            var id = row.dataset.linkId;
+            if (e.target.checked) selectedLinkIds[id] = true;
+            else delete selectedLinkIds[id];
+            row.classList.toggle("selected", e.target.checked);
+            updateBulkUI();
+            return;
+        }
+        // Кнопки действий
+        var btn = e.target.closest("button[data-action]");
+        if (!btn) return;
+        var act = btn.dataset.action;
+        var lid = btn.dataset.id;
+        if (act === "edit") showLinkForm(findLink(lid));
+        else if (act === "delete") {
+            var link = findLink(lid);
+            if (!link) return;
+            if (confirm('Удалить ссылку «' + link.name + '»?')) {
+                state.links = state.links.filter(function (l) { return l.id !== lid; });
+                delete selectedLinkIds[lid];
+                markDirty();
+                renderLinkList();
+            }
+        }
+        else if (act === "up") moveLinkBy(lid, -1);
+        else if (act === "down") moveLinkBy(lid, +1);
+    });
+
+    // Массовые операции: select all
+    $("#selectAllCheckbox").addEventListener("change", function (e) {
+        if (e.target.checked) {
+            state.links.forEach(function (l) { selectedLinkIds[l.id] = true; });
+        } else {
+            selectedLinkIds = {};
+        }
+        renderLinkList();
+    });
+
+    // Массовое удаление
+    $("#bulkDeleteBtn").addEventListener("click", function () {
+        var ids = Object.keys(selectedLinkIds);
+        if (!ids.length) return;
+        if (!confirm("Удалить " + ids.length + " ссылок?")) return;
+        state.links = state.links.filter(function (l) { return !selectedLinkIds[l.id]; });
+        selectedLinkIds = {};
+        markDirty();
+        renderLinkList();
+    });
+
+    // Массовое добавление тега
+    $("#bulkTagSelect").addEventListener("change", function (e) {
+        var tagId = e.target.value;
+        if (!tagId) return;
+        var tag = getTag(tagId);
+        if (!tag) { e.target.value = ""; return; }
+        var ids = Object.keys(selectedLinkIds);
+        if (!ids.length) { e.target.value = ""; return; }
+        var added = 0;
+        ids.forEach(function (lid) {
+            var link = findLink(lid);
+            if (!link) return;
+            if (link.tagIds.indexOf(tagId) < 0) {
+                link.tagIds.push(tagId);
+                added++;
+            }
+        });
+        e.target.value = "";
+        if (added > 0) markDirty();
+        renderLinkList();
+    });
+
+    function updateBulkUI() {
+        var ids = Object.keys(selectedLinkIds);
+        var count = ids.length;
+        var info = $("#linkListInfo");
+        var actions = $("#linkListActions");
+        var selectAll = $("#selectAllCheckbox");
+
+        info.textContent = count ? ("Выбрано: " + count + " из " + state.links.length) : (state.links.length + " ссылок");
+        actions.hidden = count === 0;
+
+        if (state.links.length === 0) {
+            selectAll.checked = false;
+            selectAll.indeterminate = false;
+            return;
+        }
+        if (count === 0) {
+            selectAll.checked = false;
+            selectAll.indeterminate = false;
+        } else if (count === state.links.length) {
+            selectAll.checked = true;
+            selectAll.indeterminate = false;
+        } else {
+            selectAll.checked = false;
+            selectAll.indeterminate = true;
+        }
+    }
+
+    function renderBulkTagOptions() {
+        var sel = $("#bulkTagSelect");
+        if (!sel) return;
+        var current = sel.value;
+        sel.innerHTML = '<option value="">🏷 Добавить тег…</option>';
+        state.tags.forEach(function (tag) {
+            var opt = document.createElement("option");
+            opt.value = tag.id;
+            opt.textContent = tag.name;
+            sel.appendChild(opt);
+        });
+        if (current) sel.value = current;
+    }
+
+    /* ============ Форма ссылки ============ */
+    function showLinksList() {
+        editingLinkId = null;
+        $("#linksListView").hidden = false;
+        $("#linkFormView").hidden = true;
+        renderLinkList();
+    }
+    function showLinkForm(link) {
+        editingLinkId = link ? link.id : null;
+        $("#f-name").value = link ? link.name : "";
+        $("#f-desc").value = link ? link.description : "";
+        $("#f-url").value = link ? link.url : "";
+        $("#f-button").value = link ? (link.button || "") : "";
+        renderLinkTagSelector(link ? link.tagIds : []);
+        $("#linksListView").hidden = true;
+        $("#linkFormView").hidden = false;
+        setTimeout(function () { try { $("#f-name").focus(); } catch (e) {} }, 30);
+    }
+
+    $("#addLinkBtn").addEventListener("click", function () { showLinkForm(null); });
+    $("#cancelLinkForm").addEventListener("click", showLinksList);
+
+    $("#linkForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var name = $("#f-name").value.trim();
+        var description = $("#f-desc").value.trim();
+        var url = $("#f-url").value.trim();
+        var button = $("#f-button").value.trim() || "Перейти";
+        if (!name) { alert("Укажите название."); return; }
+        if (!url) { alert("Укажите ссылку."); return; }
+        if (editingLinkId) {
+            var link = findLink(editingLinkId);
+            if (link) {
+                link.name = name;
+                link.description = description;
+                link.url = url;
+                link.button = button;
+                link.tagIds = selectedTagIds.slice();
+            }
+        } else {
+            state.links.push({
+                id: uid("l"), name: name, description: description,
+                url: url, button: button, tagIds: selectedTagIds.slice()
+            });
+        }
+        markDirty();
+        showLinksList();
+    });
+
+    $("#resetBtn").addEventListener("click", function () {
+        if (!confirm("Очистить список ссылок? (в редакторе — до сохранения в файл)")) return;
+        state.links = [];
+        selectedLinkIds = {};
+        markDirty();
+        renderLinkList();
+    });
+
+    /* ============ Селектор тегов ============ */
+    function renderLinkTagSelector(selected) {
+        selectedTagIds = Array.isArray(selected) ? selected.slice() : [];
+        var box = $("#linkTags");
+        box.innerHTML = "";
+        if (!state.tags.length) {
+            box.innerHTML = '<span style="color: var(--text-muted); font-size: 0.88rem;">Список тегов пуст. Добавьте их во вкладке «Теги».</span>';
+            return;
+        }
+        state.tags.forEach(function (tag) {
+            var chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "tag-chip";
+            chip.textContent = tag.name;
+            var isSel = selectedTagIds.indexOf(tag.id) >= 0;
+            applyChipStyle(chip, tag, isSel);
+            chip.addEventListener("click", function () {
+                var idx = selectedTagIds.indexOf(tag.id);
+                if (idx >= 0) selectedTagIds.splice(idx, 1);
+                else selectedTagIds.push(tag.id);
+                applyChipStyle(chip, tag, idx < 0);
+            });
+            box.appendChild(chip);
+        });
+    }
+    function applyChipStyle(chip, tag, selected) {
+        if (selected) {
+            chip.classList.add("selected");
+            chip.style.background = hexToRgba(tag.color, 0.16);
+            chip.style.color = tag.color;
+            chip.style.borderColor = hexToRgba(tag.color, 0.55);
+        } else {
+            chip.classList.remove("selected");
+            chip.style.background = "";
+            chip.style.color = "";
+            chip.style.borderColor = "";
+        }
+    }
+    function refreshLinkTagSelector() {
+        if (!$("#linkFormView").hidden) renderLinkTagSelector(selectedTagIds);
+    }
+
+    /* ============ Открытие App.html ============ */
+    async function openAppFile() {
+        if (!supportsFileSystem) {
+            alert("Ваш браузер не поддерживает File System Access API. Откройте эту страницу в Chrome, Edge, Яндекс.Браузере или Opera.");
+            return;
+        }
+        if (dirty) {
+            if (!confirm("Есть несохранённые изменения. Продолжить без сохранения?")) return;
+        }
+        try {
+            var handles = await window.showOpenFilePicker({
+                id: "linksAppFile",
+                multiple: false,
+                types: [{ description: "App.html", accept: { "text/html": [".html", ".htm"] } }]
+            });
+            var handle = handles[0];
+            if (!handle) return;
+            var file = await handle.getFile();
+            var html = await file.text();
+            var parsed = extractAppData(html);
+            if (!parsed) {
+                alert('В файле не найден блок данных id="app-data". Убедитесь, что вы выбрали App.html от этого редактора.');
+                return;
+            }
+            appFileHandle = handle;
+            appFileBefore = parsed.before;
+            appFileAfter = parsed.after;
+            applyData(parsed.data);
+            markClean();
+            renderAll();
+            setFileBar("ok", "Файл: " + handle.name, "Файл подключён. Редактируйте и нажимайте «Сохранить в App.html».");
+        } catch (e) {
+            if (e && e.name === "AbortError") return;
+            alert("Ошибка открытия: " + (e && e.message ? e.message : e));
+        }
+    }
+
+    /* ============ Сохранение в App.html ============ */
+    async function saveToAppFile(silent) {
+        if (!appFileHandle || appFileBefore === null || appFileAfter === null) {
+            if (!silent) alert("Сначала откройте App.html.");
+            return;
+        }
+        var perm = "prompt";
+        try { perm = await appFileHandle.queryPermission({ mode: "readwrite" }); }
+        catch (e) { perm = "prompt"; }
+        if (perm !== "granted") {
+            try { perm = await appFileHandle.requestPermission({ mode: "readwrite" }); }
+            catch (e) { perm = "denied"; }
+            if (perm !== "granted") {
+                setFileBar("warn", "Файл: " + appFileHandle.name, "Нет разрешения на запись. Нажмите ещё раз и подтвердите доступ.");
+                return;
+            }
+        }
+        var payload = getCurrentData();
+        var newHtml = buildAppHtml(appFileBefore, appFileAfter, payload);
+        try {
+            var writable = await appFileHandle.createWritable();
+            await writable.write(newHtml);
+            await writable.close();
+            markClean();
+            setFileBar("ok", "Файл: " + appFileHandle.name, "Сохранено. Откройте App.html — там актуальные настройки.");
+        } catch (e) {
+            setFileBar("err", "Файл: " + appFileHandle.name, "Не удалось сохранить: " + (e && e.message ? e.message : e));
+        }
+    }
+
+    $("#openAppFileBtn").addEventListener("click", openAppFile);
+    $("#saveToAppFileBtn").addEventListener("click", function () { saveToAppFile(false); });
+
+    /* ============ Экспорт / импорт ============ */
+    $("#exportJsonBtn").addEventListener("click", function () {
+        var blob = new Blob([JSON.stringify(getCurrentData(), null, 2)], { type: "application/json" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "links-settings.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 100);
+    });
+
+    $("#importJsonBtn").addEventListener("click", function () { $("#importJsonInput").click(); });
+    $("#importJsonInput").addEventListener("change", function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+            try {
+                var parsed = JSON.parse(ev.target.result);
+                applyData(parsed);
+                markDirty();
+                renderAll();
+                alert("Данные загружены в редактор. Не забудьте нажать «Сохранить в App.html».");
+            } catch (err) {
+                alert("Ошибка импорта: " + err.message);
+            }
+        };
+        reader.readAsText(file);
+        e.target.value = "";
+    });
+
+    /* ============ Старт ============ */
+    setFileBar("", "Файл App.html не выбран", "Нажмите «Открыть App.html» и выберите файл из этой же папки.");
+    renderAll();
+})();
+</script>
+</body>
+</html>

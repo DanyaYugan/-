@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Полезные ссылки</title>
+<style>
+    :root, [data-theme="light"] {
+        --bg: #f4f6f8; --card-bg: #ffffff;
+        --text: #1c1e21; --text-muted: #5f6368;
+        --border: #e4e6eb; --border-strong: #cbd5e1;
+        --accent: #2563eb; --accent-hover: #1d4ed8;
+        --accent-soft: rgba(37,99,235,0.1);
+        --success: #059669; --success-soft: #ecfdf5;
+        --hover-bg: #f8fafc;
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+        --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.08);
+    }
+    [data-theme="dark"] {
+        --bg: #0b1220; --card-bg: #131c2e;
+        --text: #e6edf7; --text-muted: #94a3b8;
+        --border: #26324a; --border-strong: #3b4a68;
+        --accent: #3b82f6; --accent-hover: #60a5fa;
+        --accent-soft: rgba(59,130,246,0.15);
+        --success: #34d399; --success-soft: rgba(52,211,153,0.15);
+        --hover-bg: #1a2438;
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25);
+        --shadow-md: 0 4px 6px rgba(0,0,0,0.4), 0 10px 20px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: var(--bg); color: var(--text); line-height: 1.6;
+        padding: 40px 20px;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; text-align: center; }
+    .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 32px; font-size: 1rem; }
+
+    /* Toolbar */
+    .toolbar {
+        display: flex; gap: 12px; align-items: stretch;
+        margin-bottom: 24px;
+    }
+    .search-wrap {
+        position: relative; flex: 1;
+    }
+    .search-wrap input {
+        width: 100%; height: 100%; min-height: 42px;
+        padding: 10px 40px 10px 40px;
+        border: 1px solid var(--border); border-radius: 10px;
+        background: var(--card-bg); color: var(--text);
+        font-size: 0.95rem; font-family: inherit;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .search-wrap input:focus {
+        outline: none; border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .search-wrap input::-webkit-search-cancel-button { display: none; }
+    .search-icon {
+        position: absolute; left: 13px; top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted); pointer-events: none;
+        display: flex; align-items: center;
+    }
+    .search-clear {
+        position: absolute; right: 8px; top: 50%;
+        transform: translateY(-50%);
+        width: 26px; height: 26px; border-radius: 6px;
+        border: none; background: transparent;
+        color: var(--text-muted); cursor: pointer;
+        font-size: 1.15rem; line-height: 1;
+        display: none; align-items: center; justify-content: center;
+        font-family: inherit;
+    }
+    .search-clear.visible { display: flex; }
+    .search-clear:hover { background: var(--hover-bg); color: var(--text); }
+
+    .view-toggle {
+        display: flex; border: 1px solid var(--border); border-radius: 10px;
+        overflow: hidden; background: var(--card-bg);
+    }
+    .view-toggle button {
+        padding: 0 14px; border: none; background: transparent;
+        color: var(--text-muted); cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: background-color 0.15s, color 0.15s;
+        font-family: inherit;
+        min-width: 42px;
+    }
+    .view-toggle button:hover { background: var(--hover-bg); color: var(--text); }
+    .view-toggle button.active { background: var(--accent); color: #fff; }
+    .view-toggle button + button { border-left: 1px solid var(--border); }
+
+    /* Grid */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+    }
+    .card {
+        background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+        box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .card-content {
+        padding: 24px;
+        display: flex; flex-direction: column;
+        flex-grow: 1;
+        gap: 16px;
+    }
+    .card-main {
+        display: flex; flex-direction: column; flex-grow: 1;
+    }
+    .card h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 10px; line-height: 1.3; }
+    .card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; flex-grow: 1; }
+    .card-actions { display: flex; gap: 8px; }
+    .card-actions .btn { flex: 1; }
+    .btn {
+        display: inline-block; text-align: center; padding: 12px 20px;
+        background: var(--accent); color: #fff; text-decoration: none;
+        font-weight: 600; font-size: 0.9rem; border-radius: 8px;
+        transition: background-color 0.15s;
+        border: none; cursor: pointer; font-family: inherit;
+    }
+    .btn:hover { background: var(--accent-hover); }
+    .copy-btn {
+        flex-shrink: 0;
+        width: 42px;
+        border: 1px solid var(--border);
+        border-radius: 8px; background: var(--card-bg);
+        color: var(--text-muted); cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+        padding: 0;
+    }
+    .copy-btn:hover {
+        background: var(--hover-bg); color: var(--text);
+        border-color: var(--border-strong);
+    }
+    .copy-btn.copied {
+        background: var(--success-soft);
+        border-color: var(--success);
+        color: var(--success);
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .tag-badge {
+        display: inline-block; font-size: 0.7rem; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.5px;
+        padding: 3px 9px; border-radius: 20px; width: fit-content; white-space: nowrap;
+    }
+
+    /* List view */
+    .grid.view-list {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .grid.view-list .card:hover { transform: none; box-shadow: var(--shadow-sm); }
+    .grid.view-list .card-content {
+        flex-direction: row;
+        align-items: center;
+        padding: 14px 18px;
+        gap: 16px;
+    }
+    .grid.view-list .card-main {
+        gap: 2px;
+        min-width: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+    .grid.view-list .tags { margin-bottom: 4px; }
+    .grid.view-list h2 {
+        font-size: 1rem;
+        margin-bottom: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .grid.view-list p {
+        margin-bottom: 0;
+        flex-grow: 0;
+        font-size: 0.83rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .grid.view-list .card-actions {
+        flex-shrink: 0;
+        align-items: center;
+    }
+    .grid.view-list .card-actions .btn {
+        padding: 8px 16px;
+        font-size: 0.83rem;
+        white-space: nowrap;
+    }
+    .grid.view-list .copy-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .empty-state {
+        grid-column: 1 / -1; text-align: center; color: var(--text-muted);
+        padding: 60px 20px; font-size: 0.95rem;
+    }
+    .empty-state code {
+        background: var(--card-bg); padding: 2px 6px; border-radius: 4px;
+        font-family: ui-monospace, monospace;
+    }
+
+    @media (max-width: 640px) {
+        h1 { font-size: 1.5rem; }
+        body { padding: 20px 12px; }
+        .grid { gap: 16px; }
+        .card-content { padding: 18px; }
+        .toolbar { flex-wrap: wrap; }
+        .search-wrap { width: 100%; flex-basis: 100%; }
+        .grid.view-list .card-content {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .grid.view-list .card-actions { width: 100%; }
+        .grid.view-list .card-actions .btn { flex: 1; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1 id="pageTitle">Полезные программы и сервисы</h1>
+    <p class="subtitle" id="pageSubtitle"></p>
+
+    <div class="toolbar" id="toolbar" hidden>
+        <div class="search-wrap">
+            <span class="search-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </span>
+            <input type="search" id="searchInput" placeholder="Поиск по названию, описанию, тегам..." autocomplete="off">
+            <button class="search-clear" id="searchClear" title="Очистить" type="button">&times;</button>
+        </div>
+        <div class="view-toggle" id="viewToggle">
+            <button data-view="grid" title="Сетка" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+            <button data-view="list" title="Список" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+</div>
+
+<script id="app-data" type="application/json">{
+  "theme": "system",
+  "title": "Полезные программы и сервисы",
+  "subtitle": "Ссылки на скачивание браузеров, утилит, архивов и сетевых инструментов",
+  "tags": [
+    {
+      "id": "t-browser",
+      "name": "Браузер",
+      "color": "#2563eb"
+    },
+    {
+      "id": "t-opensrc",
+      "name": "Open Source",
+      "color": "#059669"
+    },
+    {
+      "id": "t-network",
+      "name": "Сеть",
+      "color": "#7c3aed"
+    },
+    {
+      "id": "t-media",
+      "name": "Медиа",
+      "color": "#db2777"
+    },
+    {
+      "id": "t-game",
+      "name": "Игры",
+      "color": "#4338ca"
+    },
+    {
+      "id": "t-archive",
+      "name": "Архиватор",
+      "color": "#d97706"
+    },
+    {
+      "id": "t-linux",
+      "name": "Linux",
+      "color": "#f97316"
+    },
+    {
+      "id": "t-utility",
+      "name": "Утилита",
+      "color": "#0ea5e9"
+    }
+  ],
+  "links": [
+    {
+      "id": "l1",
+      "name": "Яндекс Браузер",
+      "description": "Быстрый и безопасный браузер с встроенными нейросетями, переводом видео, блокировкой рекламы и защитой от мошеннических сайтов.",
+      "tagIds": [
+        "t-browser"
+      ],
+      "url": "https://browser.yandex.ru/download",
+      "button": "Скачать"
+    },
+    {
+      "id": "l2",
+      "name": "Google Chrome",
+      "description": "Один из самых популярных браузеров в мире с минималистичным интерфейсом, высокой скоростью работы и поддержкой современных веб-стандартов.",
+      "tagIds": [
+        "t-browser"
+      ],
+      "url": "https://www.google.com/intl/ru/chrome/next-steps.html",
+      "button": "Перейти"
+    },
+    {
+      "id": "l3",
+      "name": "SophiApp",
+      "description": "Бесплатное приложение с открытым исходным кодом для тонкой настройки Windows 10 и 11. Более 130 твиков, современный интерфейс, портативная версия.",
+      "tagIds": [
+        "t-opensrc"
+      ],
+      "url": "https://github.com/Sophia-Community/SophiApp",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l4",
+      "name": "K-Lite Codec Pack",
+      "description": "Универсальный набор кодеков и утилит для воспроизведения аудио и видеофайлов практически любых форматов. Доступен в нескольких редакциях.",
+      "tagIds": [
+        "t-media"
+      ],
+      "url": "https://www.codecguide.com/download_kl.htm",
+      "button": "Скачать"
+    },
+    {
+      "id": "l22",
+      "name": "Figma",
+      "description": "Облачный сервис для дизайна интерфейсов и прототипирования с настольными приложениями для Windows и macOS. Совместная работа в реальном времени, плагины, автолейауты и экспорт в код.",
+      "tagIds": [
+        "t-media",
+        "t-utility"
+      ],
+      "url": "https://www.figma.com/downloads/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l5",
+      "name": "WinRAR",
+      "description": "Мощный архиватор с поддержкой форматов RAR, ZIP и многих других. Сжатие, шифрование, многотомные архивы и восстановление повреждённых данных.",
+      "tagIds": [
+        "t-archive"
+      ],
+      "url": "https://www.rarlab.com/download.htm",
+      "button": "Скачать"
+    },
+    {
+      "id": "l6",
+      "name": "7-Zip",
+      "description": "Бесплатный архиватор с открытым кодом и высокой степенью сжатия. Поддерживает собственный формат 7z, а также ZIP, RAR, ISO и десятки других.",
+      "tagIds": [
+        "t-opensrc",
+        "t-archive"
+      ],
+      "url": "https://www.7-zip.org/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l9",
+      "name": "Notepad++",
+      "description": "Бесплатный текстовый редактор с открытым кодом для программистов. Подсветка синтаксиса для 80+ языков, сворачивание кода, поддержка плагинов.",
+      "tagIds": [
+        "t-opensrc"
+      ],
+      "url": "https://github.com/notepad-plus-plus/notepad-plus-plus",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l8",
+      "name": "Steam",
+      "description": "Крупнейшая платформа цифровой дистрибуции игр: около 30 000 игр, автоматические обновления, сообщество, достижения и облачные сохранения.",
+      "tagIds": [
+        "t-game"
+      ],
+      "url": "https://store.steampowered.com/about/",
+      "button": "Установить"
+    },
+    {
+      "id": "l25",
+      "name": "TLauncher",
+      "description": "Популярный лаунчер Minecraft для Windows, macOS и Linux. Позволяет играть в разные версии игры, устанавливать моды, скины и плащи, а также запускать несколько аккаунтов одновременно.",
+      "tagIds": [
+        "t-game",
+        "t-utility"
+      ],
+      "url": "https://tlauncher.ru/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l7",
+      "name": "Amnezia VPN",
+      "description": "Бесплатный VPN-клиент с открытым кодом для создания собственного сервера. Поддерживает протоколы с защитой от DPI-детектирования.",
+      "tagIds": [
+        "t-network",
+        "t-opensrc"
+      ],
+      "url": "https://github.com/amnezia-vpn/amnezia-client",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l12",
+      "name": "AdGuard VPN",
+      "description": "Быстрый и приватный VPN-сервис с открытым исходным кодом. Собственный протокол, шифрование трафика, блокировка рекламы и трекеров.",
+      "tagIds": [
+        "t-network"
+      ],
+      "url": "https://s3.eu-north-1.amazonaws.com/adguard-vpn.com/index.html",
+      "button": "Скачать"
+    },
+    {
+      "id": "l18",
+      "name": "Zapret Discord YouTube",
+      "description": "Бесплатный инструмент с открытым кодом для обхода блокировок и замедления Discord и YouTube. Работает как локальный прокси, не требует установки драйверов, поддерживает Windows и Linux.",
+      "tagIds": [
+        "t-network",
+        "t-opensrc"
+      ],
+      "url": "https://github.com/flowseal/zapret-discord-youtube",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l20",
+      "name": "Discord",
+      "description": "Бесплатная платформа для голосового, видео- и текстового общения. Популярна среди геймеров и сообществ: серверы, каналы, демонстрация экрана, боты и интеграции с играми.",
+      "tagIds": [
+        "t-network",
+        "t-utility"
+      ],
+      "url": "https://discord.com/download",
+      "button": "Скачать"
+    },
+    {
+      "id": "l19",
+      "name": "TeamSpeak",
+      "description": "Проприетарное приложение для голосовой связи через интернет. Низкая задержка, высокое качество звука, шумоподавление, поддержка собственных серверов и клиентов для Windows, macOS, Linux, Android и iOS.",
+      "tagIds": [
+        "t-network",
+        "t-utility"
+      ],
+      "url": "https://www.teamspeak.com/en/downloads",
+      "button": "Скачать"
+    },
+    {
+      "id": "l23",
+      "name": "Telegram Desktop",
+      "description": "Официальный десктопный клиент мессенджера Telegram для Windows, macOS и Linux. Быстрый, безопасный, синхронизируется с мобильным приложением, поддерживает секретные чаты и обмен файлами до 2 ГБ.",
+      "tagIds": [
+        "t-network",
+        "t-utility"
+      ],
+      "url": "https://desktop.telegram.org/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l14",
+      "name": "VirusTotal",
+      "description": "Онлайн-сервис для проверки файлов и ссылок на вирусы. Анализирует более 70 антивирусными движками, показывает репутацию и поведение.",
+      "tagIds": [
+        "t-network"
+      ],
+      "url": "https://www.virustotal.com/",
+      "button": "Перейти"
+    },
+    {
+      "id": "l21",
+      "name": "Kaspersky Virus Removal Tool",
+      "description": "Бесплатная утилита для лечения заражённых компьютеров. Сканирует систему и удаляет вирусы, трояны, рекламное ПО и руткиты, которые пропустил основной антивирус.",
+      "tagIds": [
+        "t-utility"
+      ],
+      "url": "https://www.kaspersky.ru/downloads/free-virus-removal-tool",
+      "button": "Скачать"
+    },
+    {
+      "id": "l10",
+      "name": "DPI Detector",
+      "description": "Инструмент для анализа цензуры трафика: обнаруживает блокировки сайтов, CDN, подмену DNS и обрывы соединений по TCP 16–20 КБ.",
+      "tagIds": [
+        "t-network"
+      ],
+      "url": "https://github.com/Runnin4ik/dpi-detector",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l11",
+      "name": "Netwatch",
+      "description": "Сетевой монитор для терминала: живой захват трафика, определение процессов за соединениями, диагностика проблем с TLS и подсказки по исправлению.",
+      "tagIds": [
+        "t-network"
+      ],
+      "url": "https://github.com/matthart1983/netwatch",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l24",
+      "name": "Tabby",
+      "description": "Современный эмулятор терминала с открытым кодом, SSH- и последовательный клиент для Windows, macOS и Linux. Настраиваемый интерфейс, вкладки, разделение экрана, плагины и портативная версия.",
+      "tagIds": [
+        "t-utility",
+        "t-opensrc"
+      ],
+      "url": "https://github.com/Eugeny/tabby",
+      "button": "Скачать с GitHub"
+    },
+    {
+      "id": "l13",
+      "name": "Rufus",
+      "description": "Утилита для создания загрузочных USB-накопителей. Поддерживает Windows, Linux, UEFI и MBR/GPT. Работает без установки.",
+      "tagIds": [
+        "t-utility",
+        "t-opensrc"
+      ],
+      "url": "https://rufus.ie/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l15",
+      "name": "Ubuntu",
+      "description": "Самый популярный дистрибутив Linux. Стабильная LTS-версия каждые 2 года, огромное сообщество, корпоративная поддержка Canonical.",
+      "tagIds": [
+        "t-linux",
+        "t-opensrc"
+      ],
+      "url": "https://ubuntu.com/download",
+      "button": "Скачать"
+    },
+    {
+      "id": "l16",
+      "name": "Kubuntu",
+      "description": "Ubuntu с рабочим столом KDE Plasma. Привычный интерфейс Windows-подобного типа, гибкая настройка и лёгкость.",
+      "tagIds": [
+        "t-linux",
+        "t-opensrc"
+      ],
+      "url": "https://kubuntu.org/download/",
+      "button": "Скачать"
+    },
+    {
+      "id": "l17",
+      "name": "Arch Linux",
+      "description": "Минималистичный дистрибутив Linux с философией «сделай сам». Постоянное обновление, AUR, полный контроль над системой.",
+      "tagIds": [
+        "t-linux",
+        "t-opensrc"
+      ],
+      "url": "https://archlinux.org/download/",
+      "button": "Скачать"
+    }
+  ]
+}</script>
+
+<script>
+(function () {
+    "use strict";
+
+    var VIEW_KEY = "links_view_mode";
+
+    // ---- Чтение встроенных данных ----
+    var data = { theme: "system", title: "Полезные ссылки", subtitle: "", tags: [], links: [] };
+    try {
+        var dataEl = document.getElementById("app-data");
+        if (dataEl) {
+            var parsed = JSON.parse(dataEl.textContent || "{}");
+            if (parsed && typeof parsed === "object") {
+                if (parsed.theme) data.theme = parsed.theme;
+                if (typeof parsed.title === "string") data.title = parsed.title;
+                if (typeof parsed.subtitle === "string") data.subtitle = parsed.subtitle;
+                if (Array.isArray(parsed.tags)) data.tags = parsed.tags;
+                if (Array.isArray(parsed.links)) data.links = parsed.links;
+            }
+        }
+    } catch (e) {
+        console.error("Не удалось прочитать встроенные данные:", e);
+    }
+
+    // ---- Состояние UI (не сохраняется в файл, только в localStorage браузера) ----
+    var ui = { search: "", view: "grid" };
+    try {
+        var savedView = localStorage.getItem(VIEW_KEY);
+        if (savedView === "grid" || savedView === "list") ui.view = savedView;
+    } catch (e) {}
+
+    // ---- Утилиты ----
+    function esc(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+    }
+    function safeUrl(raw) {
+        try {
+            var u = new URL(String(raw).trim(), window.location.href);
+            if (u.protocol === "http:" || u.protocol === "https:") return u.href;
+        } catch (e) {}
+        return "#";
+    }
+    function isValidHex(c) {
+        return typeof c === "string" && /^#[0-9a-fA-F]{6}$/.test(c);
+    }
+    function hexToRgba(hex, a) {
+        if (!isValidHex(hex)) hex = "#64748b";
+        var h = hex.slice(1);
+        return "rgba(" + parseInt(h.slice(0, 2), 16) + "," + parseInt(h.slice(2, 4), 16) + "," + parseInt(h.slice(4, 6), 16) + "," + a + ")";
+    }
+    function getTag(id) {
+        for (var i = 0; i < data.tags.length; i++) if (data.tags[i].id === id) return data.tags[i];
+        return null;
+    }
+    function filterLinks(links, query) {
+        var q = String(query || "").trim().toLowerCase();
+        if (!q) return links;
+        return links.filter(function (link) {
+            if (link.name && link.name.toLowerCase().indexOf(q) >= 0) return true;
+            if (link.description && link.description.toLowerCase().indexOf(q) >= 0) return true;
+            if (link.url && link.url.toLowerCase().indexOf(q) >= 0) return true;
+            if (Array.isArray(link.tagIds)) {
+                for (var i = 0; i < link.tagIds.length; i++) {
+                    var tag = getTag(link.tagIds[i]);
+                    if (tag && tag.name && tag.name.toLowerCase().indexOf(q) >= 0) return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    // ---- Тема ----
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    function applyTheme() {
+        var eff = data.theme === "system" ? (mq.matches ? "dark" : "light") : data.theme;
+        document.documentElement.setAttribute("data-theme", eff);
+    }
+    try { mq.addEventListener("change", applyTheme); }
+    catch (e) { try { mq.addListener(applyTheme); } catch (e2) {} }
+
+    // ---- Заголовки ----
+    document.getElementById("pageTitle").textContent = data.title || "Полезные ссылки";
+    document.getElementById("pageSubtitle").textContent = data.subtitle || "";
+    document.title = data.title || "Полезные ссылки";
+
+    // ---- Рендер ----
+    function render() {
+        var grid = document.getElementById("grid");
+        var toolbar = document.getElementById("toolbar");
+
+        toolbar.hidden = !data.links.length;
+        grid.classList.toggle("view-list", ui.view === "list");
+
+        var btns = document.querySelectorAll("#viewToggle button");
+        for (var b = 0; b < btns.length; b++) {
+            btns[b].classList.toggle("active", btns[b].dataset.view === ui.view);
+        }
+
+        if (!data.links.length) {
+            grid.innerHTML = '<div class="empty-state">Список пуст. Откройте <code>Settings.html</code>, чтобы добавить ссылки, теги и заголовок.</div>';
+            return;
+        }
+
+        var filtered = filterLinks(data.links, ui.search);
+        if (!filtered.length) {
+            grid.innerHTML = '<div class="empty-state">Ничего не найдено по запросу &laquo;' + esc(ui.search) + '&raquo;.</div>';
+            return;
+        }
+
+        grid.innerHTML = "";
+        for (var i = 0; i < filtered.length; i++) {
+            grid.appendChild(buildCard(filtered[i]));
+        }
+    }
+
+    function buildCard(link) {
+        var card = document.createElement("div");
+        card.className = "card";
+
+        var tagsHtml = "";
+        var tagIds = Array.isArray(link.tagIds) ? link.tagIds : [];
+        for (var j = 0; j < tagIds.length; j++) {
+            var tag = getTag(tagIds[j]);
+            if (!tag) continue;
+            tagsHtml += '<span class="tag-badge" style="background:' + hexToRgba(tag.color, 0.16) + ';color:' + esc(tag.color) + ';">' + esc(tag.name) + '</span>';
+        }
+
+        var url = safeUrl(link.url);
+        var rawUrl = String(link.url || "").trim();
+
+        var content = document.createElement("div");
+        content.className = "card-content";
+
+        var main = document.createElement("div");
+        main.className = "card-main";
+        main.innerHTML =
+            (tagsHtml ? '<div class="tags">' + tagsHtml + '</div>' : '') +
+            '<h2>' + esc(link.name || "Без названия") + '</h2>' +
+            '<p>' + esc(link.description || "") + '</p>';
+
+        var actions = document.createElement("div");
+        actions.className = "card-actions";
+
+        var mainBtn = document.createElement("a");
+        mainBtn.className = "btn";
+        mainBtn.href = url;
+        mainBtn.target = "_blank";
+        mainBtn.rel = "noopener";
+        mainBtn.textContent = link.button || "Перейти";
+
+        var copyBtn = document.createElement("button");
+        copyBtn.type = "button";
+        copyBtn.className = "copy-btn";
+        copyBtn.title = "Копировать ссылку";
+        copyBtn.setAttribute("aria-label", "Копировать ссылку");
+        copyBtn.dataset.url = rawUrl;
+        copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+
+        actions.appendChild(mainBtn);
+        actions.appendChild(copyBtn);
+        content.appendChild(main);
+        content.appendChild(actions);
+        card.appendChild(content);
+        return card;
+    }
+
+    // ---- Поиск ----
+    var searchInput = document.getElementById("searchInput");
+    var searchClear = document.getElementById("searchClear");
+
+    function updateClearVisibility() {
+        searchClear.classList.toggle("visible", searchInput.value.length > 0);
+    }
+
+    searchInput.addEventListener("input", function (e) {
+        ui.search = e.target.value;
+        updateClearVisibility();
+        render();
+    });
+
+    searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && searchInput.value) {
+            e.preventDefault();
+            searchInput.value = "";
+            ui.search = "";
+            updateClearVisibility();
+            render();
+        }
+    });
+
+    searchClear.addEventListener("click", function () {
+        searchInput.value = "";
+        ui.search = "";
+        updateClearVisibility();
+        render();
+        searchInput.focus();
+    });
+
+    // ---- Переключатель вида ----
+    document.getElementById("viewToggle").addEventListener("click", function (e) {
+        var btn = e.target.closest("button[data-view]");
+        if (!btn) return;
+        ui.view = btn.dataset.view;
+        try { localStorage.setItem(VIEW_KEY, ui.view); } catch (err) {}
+        render();
+    });
+
+    // ---- Копирование ----
+    function copyToClipboard(text) {
+        if (!text) return Promise.reject(new Error("Пустая ссылка"));
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function (resolve, reject) {
+            try {
+                var ta = document.createElement("textarea");
+                ta.value = text;
+                ta.style.position = "fixed";
+                ta.style.opacity = "0";
+                ta.style.top = "0";
+                ta.style.left = "0";
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                var ok = document.execCommand("copy");
+                document.body.removeChild(ta);
+                if (ok) resolve(); else reject(new Error("execCommand copy failed"));
+            } catch (err) { reject(err); }
+        });
+    }
+
+    document.getElementById("grid").addEventListener("click", function (e) {
+        var btn = e.target.closest(".copy-btn");
+        if (!btn) return;
+        e.preventDefault();
+        var url = btn.dataset.url;
+        copyToClipboard(url).then(function () {
+            btn.classList.add("copied");
+            var original = btn.innerHTML;
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            setTimeout(function () {
+                btn.classList.remove("copied");
+                btn.innerHTML = original;
+            }, 1400);
+        }).catch(function (err) {
+            alert("Не удалось скопировать: " + (err && err.message ? err.message : err));
+        });
+    });
+
+    // ---- Старт ----
+    applyTheme();
+    render();
+    updateClearVisibility();
+})();
+</script>
+</body>
+</html>
